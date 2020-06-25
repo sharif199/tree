@@ -14,7 +14,6 @@
 
 package org.opengroup.osdu.storage.provider.gcp.credentials;
 
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
@@ -32,6 +31,7 @@ import org.opengroup.osdu.core.common.model.http.AppException;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Date;
+import com.google.auth.http.HttpCredentialsAdapter;
 
 public class DatastoreCredential extends GoogleCredentials {
 
@@ -85,7 +85,8 @@ public class DatastoreCredential extends GoogleCredentials {
 		if (this.iam == null) {
 
 			Iam.Builder builder = new Iam.Builder(GoogleNetHttpTransport.newTrustedTransport(), JSON_FACTORY,
-					GoogleCredential.getApplicationDefault()).setApplicationName("Data Ecosystem Storage Service");
+					new HttpCredentialsAdapter(GoogleCredentials.getApplicationDefault()))
+					.setApplicationName("DPS Storage Service");
 
 			this.iam = builder.build();
 		}

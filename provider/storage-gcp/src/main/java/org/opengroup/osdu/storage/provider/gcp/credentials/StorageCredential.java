@@ -23,7 +23,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.http.HttpStatus;
 
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
@@ -40,6 +39,7 @@ import org.opengroup.osdu.core.common.http.HttpClient;
 import org.opengroup.osdu.core.common.http.HttpRequest;
 import org.opengroup.osdu.core.common.http.HttpResponse;
 import org.opengroup.osdu.core.common.model.http.AppException;
+import com.google.auth.http.HttpCredentialsAdapter;
 
 public class StorageCredential extends GoogleCredentials {
 	private static final long serialVersionUID = -8461791038757192780L;
@@ -135,7 +135,8 @@ public class StorageCredential extends GoogleCredentials {
 	private Iam getIam() throws GeneralSecurityException, IOException {
 		if (this.iam == null) {
 			Iam.Builder builder = new Iam.Builder(GoogleNetHttpTransport.newTrustedTransport(), JSON_FACTORY,
-					GoogleCredential.getApplicationDefault()).setApplicationName("Data Ecosystem Services");
+					new HttpCredentialsAdapter(GoogleCredentials.getApplicationDefault()))
+					.setApplicationName("DPS Storage Service");
 
 			this.iam = builder.build();
 		}
