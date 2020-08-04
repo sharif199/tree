@@ -57,11 +57,12 @@ public class DatastoreFactory implements IDatastoreFactory {
 		}
 
 		return DatastoreOptions.newBuilder()
-				.setRetrySettings(RETRY_SETTINGS)
-				.setCredentials(credential)
-				.setProjectId(this.tenant.getProjectId())
-				.build()
-				.getService();
+			.setRetrySettings(RETRY_SETTINGS)
+			.setCredentials(credential)
+			.setProjectId(this.tenant.getProjectId())
+			.setNamespace(this.tenant.getDataPartitionId())
+			.build()
+			.getService();
 	}
 
 	private String getCacheKey() {
