@@ -18,7 +18,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.opengroup.osdu</groupId>
 	<artifactId>os-storage-testing</artifactId>
-	<version>0.7.1</version>
+	<version>0.7.2-SNAPSHOT</version>
 	<description>Root Storage Service project</description>
 	<packaging>pom</packaging>
 
