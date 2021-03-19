@@ -18,7 +18,7 @@
     <parent>
         <artifactId>os-storage-testing</artifactId>
         <groupId>org.opengroup.osdu</groupId>
-        <version>0.7.2-SNAPSHOT</version>
+        <version>0.7.2</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -26,7 +26,7 @@
 
     <groupId>org.opengroup.osdu.storage</groupId>
     <artifactId>storage-test-aws-mongodb</artifactId>
-    <version>0.7.2-SNAPSHOT</version>
+    <version>0.7.2</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -46,7 +46,7 @@
         <dependency>
             <groupId>org.opengroup.osdu.storage</groupId>
             <artifactId>storage-test-core</artifactId>
-            <version>0.7.2-SNAPSHOT</version>
+            <version>0.7.2</version>
         </dependency>
 
         <dependency>
