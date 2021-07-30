@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class HealthCheckApi {
 
     @GetMapping("/health")
+    @PreAuthorize("@authorizationFilter.hasRole('" + StorageRole.ADMIN + "')")
     public String healthMessage() {
         return "Alive";
     }
