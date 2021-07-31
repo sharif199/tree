@@ -20,8 +20,10 @@ package org.opengroup.osdu.storage.api;
 import java.io.IOException;
 import org.opengroup.osdu.core.common.info.VersionInfoBuilder;
 import org.opengroup.osdu.core.common.model.info.VersionInfo;
+import org.opengroup.osdu.core.common.model.storage.StorageRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,6 +36,7 @@ public class InfoApi {
   private VersionInfoBuilder versionInfoBuilder;
 
   @GetMapping(value = "/info", produces = MediaType.APPLICATION_JSON_VALUE)
+  @PreAuthorize("@authorizationFilter.hasRole('" + StorageRole.ADMIN + "')")
   public VersionInfo info() throws IOException {
     return versionInfoBuilder.buildVersionInfo();
   }

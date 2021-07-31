@@ -17,23 +17,11 @@ public class HealthCheckApi {
     @Autowired
     IHttpClient httpClient;
 
+
     @GetMapping("/health")
+    @PreAuthorize("@authorizationFilter.hasRole('" + StorageRole.ADMIN + "')")
     public String healthMessage() {
-
-        HttpRequest httpRequest1 = HttpRequest.builder().url("http://entitlements/api/entitlements/v2/actuator/health").build();
-        HttpRequest httpRequest2 = HttpRequest.builder().url("http://entitlements/aapi/entitlements/v2/actuator/chaosmonkey").build();
-        Random rd = new Random();
-        HttpResponse httpResponse=null;
-        if(rd.nextBoolean()){
-            httpResponse =  httpClient.send(httpRequest1);
-            return "{ \"test\":true }";
-        }
-        else {
-            httpResponse = httpClient.send(httpRequest2);
-            return "{ \"test\":false }";
-        }
-
-//        return httpResponse.getBody();
+        return "Alive"
     }
 
     @GetMapping("/healthh")
