@@ -21,7 +21,7 @@ public class HealthCheckApi {
     @GetMapping("/health")
     @PreAuthorize("@authorizationFilter.hasRole('" + StorageRole.ADMIN + "')")
     public String healthMessage() {
-        return "Alive"
+        return "Alive";
     }
 
     @GetMapping("/healthh")
