@@ -9,12 +9,12 @@ import org.opengroup.osdu.core.common.model.storage.StorageRole;
 public class HealthCheckApi {
 
     @GetMapping("/health")
+    @PreAuthorize("@authorizationFilter.hasRole('" + StorageRole.ADMIN + "')")
     public String healthMessage() {
         return "Alive";
     }
 
     @GetMapping("/healthh")
-    @PreAuthorize("@authorizationFilter.hasRole('" + StorageRole.ADMIN + "')")
     public String healthMessagex2() {
         return "Alive";
     }
