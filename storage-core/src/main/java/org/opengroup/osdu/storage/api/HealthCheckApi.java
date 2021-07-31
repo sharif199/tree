@@ -21,7 +21,7 @@ public class HealthCheckApi {
     public String healthMessage() {
 
         HttpRequest httpRequest1 = HttpRequest.builder().url("http://entitlements/api/entitlements/v2/actuator/chaosmonkey").build();
-        HttpRequest httpRequest2 = HttpRequest.builder().url("http://entitlementsxa/api/entitlements/v2/actuator/chaosmonkey").build();
+        HttpRequest httpRequest2 = HttpRequest.builder().url("http://entitlementsa/aapi/entitlements/v2/actuator/chaosmonkey").build();
         Random rd = new Random();
         HttpResponse httpResponse=null;
         if(rd.nextBoolean()){
