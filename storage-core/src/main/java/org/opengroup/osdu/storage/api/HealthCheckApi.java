@@ -20,7 +20,7 @@ public class HealthCheckApi {
     @GetMapping("/health")
     public String healthMessage() {
 
-        HttpRequest httpRequest1 = HttpRequest.builder().url("http://entitlements/api/entitlements/v2/actuator/chaosmonkey").build();
+        HttpRequest httpRequest1 = HttpRequest.builder().url("http://entitlements/api/entitlements/v2/actuator/health").build();
         HttpRequest httpRequest2 = HttpRequest.builder().url("http://entitlements/aapi/entitlements/v2/actuator/chaosmonkey").build();
         Random rd = new Random();
         HttpResponse httpResponse=null;
