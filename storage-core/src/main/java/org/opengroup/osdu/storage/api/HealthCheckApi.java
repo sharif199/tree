@@ -26,7 +26,7 @@ public class HealthCheckApi {
         HttpResponse httpResponse=null;
         if(rd.nextBoolean()){
             httpResponse =  httpClient.send(httpRequest1);
-            return httpResponse.getBody();
+            return "{ \"test\":true }";
         }
         else {
             httpResponse = httpClient.send(httpRequest2);
