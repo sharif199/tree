@@ -21,7 +21,8 @@ public class HealthCheckApi {
     @GetMapping("/health")
     @PreAuthorize("@authorizationFilter.hasRole('" + StorageRole.ADMIN + "')")
     public String healthMessage() {
-        return "Alive";
+        HttpRequest httpRequest = HttpRequest.get().url("http://legal/api/legal/v1/_ah/liveness_check").build();
+        return httpClient.send(httpRequest).getBody();
     }
 
     @GetMapping("/healthh")
