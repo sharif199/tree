@@ -53,9 +53,7 @@ public class EntitlementsAndCacheServiceImpl implements IEntitlementsExtensionSe
 
     @Override
     public String authorize(DpsHeaders headers, String... roles) {
-        this.logger.info("CircuitBreakerEvent Before calling of getgroups from auth");
         Groups groups = this.getGroups(headers);
-        this.logger.info("CircuitBreakerEvent After calling of getgroups from auth");
 
         if (groups.any(roles)) {
             return groups.getDesId();
@@ -147,15 +145,12 @@ public class EntitlementsAndCacheServiceImpl implements IEntitlementsExtensionSe
         } catch (RedisException ex) {
             this.logger.error(String.format("Error getting key %s from redis: %s", cacheKey, ex.getMessage()), ex);
         }
-        this.logger.info("CircuitBreakerEvent after fetching groups from cache");
 
         if (groups == null) {
-            this.logger.info("CircuitBreakerEvent unable to fetching groups from cache");
 
             IEntitlementsService service = this.factory.create(headers);
             try {
                 groups = service.getGroups();
-                this.logger.info("CircuitBreakerEvent after getting groups from service");
 
                 this.cache.put(cacheKey, groups);
                 this.logger.debug("Entitlements cache miss");
