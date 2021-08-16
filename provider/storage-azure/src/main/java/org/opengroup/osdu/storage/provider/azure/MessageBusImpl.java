@@ -128,6 +128,8 @@ public class MessageBusImpl implements IMessageBus {
                 topicClientFactory.getClient(headers.getPartitionId(), pubSubConfig.getServiceBusTopic()).send(message);
                 try {
                     topicClientFactory.getClient(headers.getPartitionId(), "testing").send(message);
+                    topicClientFactory.getClient(headers.getPartitionId(), "recordstesting").send(message);
+
                 } catch (Exception e) {
 
                 }
