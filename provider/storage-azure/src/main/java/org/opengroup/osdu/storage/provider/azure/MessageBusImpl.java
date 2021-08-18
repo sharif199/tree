@@ -126,13 +126,14 @@ public class MessageBusImpl implements IMessageBus {
             try {
                 LOGGER.debug("Storage publishes message to Service Bus " + headers.getCorrelationId());
                 topicClientFactory.getClient(headers.getPartitionId(), pubSubConfig.getServiceBusTopic()).send(message);
-                try {
-                    topicClientFactory.getClient(headers.getPartitionId(), "testing").send(message);
-                    topicClientFactory.getClient(headers.getPartitionId(), "recordstesting").send(message);
+                /*try {
+                 //   LOGGER.info("going to publish record changed message with co id :" + headers.getCorrelationId());
+                   // topicClientFactory.getClient(headers.getPartitionId(), "testing").send(message);
+                    //topicClientFactory.getClient(headers.getPartitionId(), "recordstesting").send(message);
 
                 } catch (Exception e) {
 
-                }
+                }*/
 
             } catch (Exception e) {
                 LOGGER.error(e.getMessage(), e);
