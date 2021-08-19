@@ -124,6 +124,7 @@ public class MessageBusImpl implements IMessageBus {
             message.setContentType("application/json");
 
             try {
+                LOGGER.info("Publishing message with this id :" + message.getMessageId());
                 LOGGER.debug("Storage publishes message to Service Bus " + headers.getCorrelationId());
                 topicClientFactory.getClient(headers.getPartitionId(), pubSubConfig.getServiceBusTopic()).send(message);
                 /*try {
