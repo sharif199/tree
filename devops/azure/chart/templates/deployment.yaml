@@ -129,3 +129,5 @@ spec:
           value: "400"
         - name: "SERVER_TOMCAT_MINSPARETHREADS"
           value: "200"
+        - name: "azure_publishToEventGrid"
+          value: "true"
