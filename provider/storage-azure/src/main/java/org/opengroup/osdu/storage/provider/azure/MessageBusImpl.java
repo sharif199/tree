@@ -125,6 +125,7 @@ public class MessageBusImpl implements IMessageBus {
 
             try {
                 LOGGER.info("Publishing message with this id :" + message.getMessageId());
+                LOGGER.info("Publishing message with this data id :" + messages[i].getId());
                 LOGGER.debug("Storage publishes message to Service Bus " + headers.getCorrelationId());
                 topicClientFactory.getClient(headers.getPartitionId(), pubSubConfig.getServiceBusTopic()).send(message);
                 /*try {
