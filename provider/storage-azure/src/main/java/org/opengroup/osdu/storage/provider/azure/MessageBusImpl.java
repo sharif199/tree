@@ -69,7 +69,7 @@ public class MessageBusImpl implements IMessageBus {
             data.put("data", batch);
             data.put(DpsHeaders.ACCOUNT_ID, headers.getPartitionIdWithFallbackToAccountId());
             data.put(DpsHeaders.DATA_PARTITION_ID, headers.getPartitionIdWithFallbackToAccountId());
-            data.put(DpsHeaders.CORRELATION_ID, headers.getCorrelationId());
+            data.put(DpsHeaders.CORRELATION_ID, headers.getCorrelationId()+"EG");
 
             String messageId = UUID.randomUUID().toString();
             eventsList.add(new EventGridEvent(
@@ -107,7 +107,7 @@ public class MessageBusImpl implements IMessageBus {
             properties.put(DpsHeaders.ACCOUNT_ID, headers.getPartitionIdWithFallbackToAccountId());
             properties.put(DpsHeaders.DATA_PARTITION_ID, headers.getPartitionIdWithFallbackToAccountId());
             headers.addCorrelationIdIfMissing();
-            properties.put(DpsHeaders.CORRELATION_ID, headers.getCorrelationId());
+            properties.put(DpsHeaders.CORRELATION_ID, headers.getCorrelationId()+"SB");
             message.setProperties(properties);
 
             // data
@@ -118,7 +118,7 @@ public class MessageBusImpl implements IMessageBus {
             jo.add("data", gson.toJsonTree(batch));
             jo.addProperty(DpsHeaders.ACCOUNT_ID, headers.getPartitionIdWithFallbackToAccountId());
             jo.addProperty(DpsHeaders.DATA_PARTITION_ID, headers.getPartitionIdWithFallbackToAccountId());
-            jo.addProperty(DpsHeaders.CORRELATION_ID, headers.getCorrelationId());
+            jo.addProperty(DpsHeaders.CORRELATION_ID, headers.getCorrelationId()+"SB");
             JsonObject jomsg = new JsonObject();
             jomsg.add("message", jo);
 
@@ -126,7 +126,7 @@ public class MessageBusImpl implements IMessageBus {
             message.setContentType("application/json");
 
             try {
-                LOGGER.debug("Storage publishes message to Service Bus " + headers.getCorrelationId());
+                LOGGER.debug("Storage publishes message to Service Bus " + headers.getCorrelationId()+"SB");
                 topicClientFactory.getClient(headers.getPartitionId(), pubSubConfig.getServiceBusTopic()).send(message);
                 LOGGER.info("Publishing message with this data id to SB:" + messages[i].getId());
 
