@@ -81,7 +81,6 @@ public class MessageBusImpl implements IMessageBus {
                     RECORDS_CHANGED_EVENT_DATA_VERSION
             ));
             LOGGER.debug("Event generated: " + messageId);
-            LOGGER.info("Publishing message with this data id to EG:" + messages[i].getId());
 
             // If a record change is not published (publishToEventGridTopic throws) we fail the job.
             // This is done to make sure no notifications are missed.
@@ -90,6 +89,8 @@ public class MessageBusImpl implements IMessageBus {
             // hence publishing one event at a time. If we are confident about the perf capabilities of consumer services,
             // we can publish more more than one event in an array.
             eventGridTopicStore.publishToEventGridTopic(headers.getPartitionId(), eventGridConfig.getTopicName(), eventsList);
+            LOGGER.info("Publishing message with this data id to EG:" + messages[i].getId());
+
         }
     }
 
@@ -125,9 +126,10 @@ public class MessageBusImpl implements IMessageBus {
             message.setContentType("application/json");
 
             try {
-                LOGGER.info("Publishing message with this data id to SB:" + messages[i].getId());
                 LOGGER.debug("Storage publishes message to Service Bus " + headers.getCorrelationId());
                 topicClientFactory.getClient(headers.getPartitionId(), pubSubConfig.getServiceBusTopic()).send(message);
+                LOGGER.info("Publishing message with this data id to SB:" + messages[i].getId());
+
                 /*try {
                  //   LOGGER.info("going to publish record changed message with co id :" + headers.getCorrelationId());
                    // topicClientFactory.getClient(headers.getPartitionId(), "testing").send(message);
