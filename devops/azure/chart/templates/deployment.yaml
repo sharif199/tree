@@ -109,8 +109,6 @@ spec:
           value: eg_sb_legaltagssubscription
         - name: entitlements_service_endpoint
           value: http://entitlements/api/entitlements/v1
-#        - name: entitlements_service_api_key
-#          value: "OBSOLETE"
         - name: legal_service_endpoint
           value: http://legal/api/legal/v1
         - name: legal_service_region
@@ -124,7 +122,7 @@ spec:
         - name: policy_service_endpoint
           value: http://policy-service/api/policy/v1
         - name: schema_endpoints_disabled
-          value: "{{ .Values.schemaEndpoints.disabled }}"
+          value: "false"
         - name: azure_istioauth_enabled
           value: "true"
         - name: azure_activedirectory_AppIdUri
