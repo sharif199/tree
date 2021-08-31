@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class EntitlementsClientFactory extends AbstractFactoryBean<IEntitlementsFactory> {
 
-	@Value("${AUTHORIZE_API}")
+	@Value("${osdu.entitlements.url}")
 	private String AUTHORIZE_API;
 
 	@Value("${AUTHORIZE_API_KEY:}")
