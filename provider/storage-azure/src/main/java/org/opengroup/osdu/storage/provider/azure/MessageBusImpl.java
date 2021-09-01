@@ -69,7 +69,7 @@ public class MessageBusImpl implements IMessageBus {
             data.put("data", batch);
             data.put(DpsHeaders.ACCOUNT_ID, headers.getPartitionIdWithFallbackToAccountId());
             data.put(DpsHeaders.DATA_PARTITION_ID, headers.getPartitionIdWithFallbackToAccountId());
-            data.put(DpsHeaders.CORRELATION_ID, headers.getCorrelationId()+"EG");
+            data.put(DpsHeaders.CORRELATION_ID, "EventGrid" + headers.getCorrelationId());
 
             String messageId = UUID.randomUUID().toString();
             eventsList.add(new EventGridEvent(
@@ -107,7 +107,11 @@ public class MessageBusImpl implements IMessageBus {
             properties.put(DpsHeaders.ACCOUNT_ID, headers.getPartitionIdWithFallbackToAccountId());
             properties.put(DpsHeaders.DATA_PARTITION_ID, headers.getPartitionIdWithFallbackToAccountId());
             headers.addCorrelationIdIfMissing();
-            properties.put(DpsHeaders.CORRELATION_ID, headers.getCorrelationId()+"SB");
+            if (eventGridConfig.isPublishingToEventGridEnabled()) {
+                properties.put(DpsHeaders.CORRELATION_ID, "SBOFF" + headers.getCorrelationId());
+            } else {
+                properties.put(DpsHeaders.CORRELATION_ID, "SBONN" + headers.getCorrelationId());
+            }
             message.setProperties(properties);
 
             // data
@@ -118,7 +122,11 @@ public class MessageBusImpl implements IMessageBus {
             jo.add("data", gson.toJsonTree(batch));
             jo.addProperty(DpsHeaders.ACCOUNT_ID, headers.getPartitionIdWithFallbackToAccountId());
             jo.addProperty(DpsHeaders.DATA_PARTITION_ID, headers.getPartitionIdWithFallbackToAccountId());
-            jo.addProperty(DpsHeaders.CORRELATION_ID, headers.getCorrelationId()+"SB");
+            if (eventGridConfig.isPublishingToEventGridEnabled()) {
+                jo.addProperty(DpsHeaders.CORRELATION_ID, "SBOFF" + headers.getCorrelationId());
+            } else {
+                jo.addProperty(DpsHeaders.CORRELATION_ID, "SBONN" + headers.getCorrelationId());
+            }
             JsonObject jomsg = new JsonObject();
             jomsg.add("message", jo);
 
@@ -126,13 +134,20 @@ public class MessageBusImpl implements IMessageBus {
             message.setContentType("application/json");
 
             try {
-                LOGGER.debug("Storage publishes message to Service Bus " + headers.getCorrelationId()+"SB");
+                if (eventGridConfig.isPublishingToEventGridEnabled()) {
+                    LOGGER.debug("StorageOFF publishes message to Service Bus " + "SBOFF" + headers.getCorrelationId());
+                    topicClientFactory.getClient(headers.getPartitionId(), "test1").send(message);
+                    LOGGER.info("Publishing OFF message with this data id to SB:" + messages[i].getId());
+
+                } else {
+                    LOGGER.debug("StorageONN publishes message to Service Bus " + "SBONN" + headers.getCorrelationId());
+                    topicClientFactory.getClient(headers.getPartitionId(), "test1").send(message);
+                    LOGGER.info("Publishing message with this data id to SB:" + messages[i].getId());
+                }
                 //topicClientFactory.getClient(headers.getPartitionId(), pubSubConfig.getServiceBusTopic()).send(message);
-                topicClientFactory.getClient(headers.getPartitionId(), "test1").send(message);
                 //topicClientFactory.getClient(headers.getPartitionId(), "test2").send(message);
                 //topicClientFactory.getClient(headers.getPartitionId(), "test3").send(message);
 
-                LOGGER.info("Publishing message with this data id to SB:" + messages[i].getId());
 
                 /*try {
                  //   LOGGER.info("going to publish record changed message with co id :" + headers.getCorrelationId());
