@@ -61,6 +61,7 @@ include:
     file: "cloud-providers/aws-maven.yml"
 
   - project: "osdu/platform/ci-cd-pipelines"
+    ref: "ibm-ubi8-java"
     file: "cloud-providers/ibm.yml"
 
   - project: 'osdu/platform/ci-cd-pipelines'
