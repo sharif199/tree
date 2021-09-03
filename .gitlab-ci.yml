@@ -47,47 +47,47 @@ variables:
 include:
   - project: "osdu/platform/ci-cd-pipelines"
     file: "standard-setup.yml"
-    ref: release/0.11
+    ref: v0.11.1
 
   - project: "osdu/platform/ci-cd-pipelines"
     file: "build/maven.yml"
-    ref: release/0.11
+    ref: v0.11.1
 
   - project: "osdu/platform/ci-cd-pipelines"
     file: "scanners/fossa-maven.yml"
-    ref: release/0.11
+    ref: v0.11.1
 
   - project: "osdu/platform/ci-cd-pipelines"
     file: "cloud-providers/aws-global.yml"
-    ref: release/0.11
+    ref: v0.11.1
 
   - project: "osdu/platform/ci-cd-pipelines"
     file: "cloud-providers/aws-maven.yml"
-    ref: release/0.11
+    ref: v0.11.1
 
   - project: "osdu/platform/ci-cd-pipelines"
     file: "cloud-providers/ibm.yml"
-    ref: release/0.11
+    ref: v0.11.1
 
   - project: 'osdu/platform/ci-cd-pipelines'
     file: "cloud-providers/osdu-gcp-gke.yml"
-    ref: release/0.11
+    ref: v0.11.1
 
   - project: 'osdu/platform/ci-cd-pipelines'
     file: 'publishing/pages.yml'
-    ref: release/0.11
+    ref: v0.11.1
 
   - project: "osdu/platform/ci-cd-pipelines"
     file: "scanners/gitlab-ultimate.yml"
-    ref: release/0.11
+    ref: v0.11.1
 
   - project: "osdu/platform/ci-cd-pipelines"
     file: "cloud-providers/azure.yml"
-    ref: release/0.11
+    ref: v0.11.1
 
   - project: 'osdu/platform/ci-cd-pipelines'
     file: 'cloud-providers/aws-mongodb.yml'
-    ref: release/0.11
+    ref: v0.11.1
 
 # disable the eslint scanner
 # I think this is being generated from the presence of an HTML file, but there
