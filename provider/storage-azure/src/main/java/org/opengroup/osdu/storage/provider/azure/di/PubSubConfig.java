@@ -18,6 +18,7 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+
 @Configuration
 @ConfigurationProperties(prefix = "azure.pubsub")
 @Getter
@@ -40,4 +41,6 @@ public class PubSubConfig {
     @Value("${azure.legal.servicebus.topic-subscription}")
     private String legalServiceBusTopicSubscription;
 
+    @Value("${azure.pubsub.batchsize}")
+    private String pubSubBatchSize;
 }
