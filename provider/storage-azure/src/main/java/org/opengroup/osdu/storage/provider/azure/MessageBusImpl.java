@@ -14,27 +14,15 @@
 
 package org.opengroup.osdu.storage.provider.azure;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.microsoft.azure.eventgrid.models.EventGridEvent;
-import com.microsoft.azure.servicebus.Message;
-import org.joda.time.DateTime;
-import org.opengroup.osdu.azure.eventgrid.EventGridTopicStore;
 import org.opengroup.osdu.azure.publisherFacade.MessagePublisher;
-import org.opengroup.osdu.azure.servicebus.ITopicClientFactory;
-//import org.opengroup.osdu.azure.publisherFacade;
 import org.opengroup.osdu.core.common.model.http.DpsHeaders;
 import org.opengroup.osdu.core.common.model.storage.PubSubInfo;
-import org.opengroup.osdu.storage.provider.azure.di.EventGridConfig;
 import org.opengroup.osdu.storage.provider.azure.di.PubSubConfig;
 import org.opengroup.osdu.storage.provider.interfaces.IMessageBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import javax.inject.Named;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @Component
@@ -51,7 +39,7 @@ public class MessageBusImpl implements IMessageBus {
         final int BATCH_SIZE = Integer.parseInt(pubSubConfig.getPubSubBatchSize());
         for (int i = 0; i < messages.length; i += BATCH_SIZE) {
             PubSubInfo[] batch = Arrays.copyOfRange(messages, i, Math.min(messages.length, i + BATCH_SIZE));
-            messagePublisher.publishMessage(batch);
+            messagePublisher.publishMessage(headers,batch);
         }
     }
 }
