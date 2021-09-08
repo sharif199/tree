@@ -30,7 +30,7 @@ public class EventGridConfig {
 
     public EventGridConfig(@Value("#{new Boolean('${azure.publishToEventGrid}')}") boolean publish,
                            @Value("#{new Integer('${azure.eventGridBatchSize}')}") int batchSize,
-                           @Value("${eventGrid.topicName}") String topicName) {
+                           @Value("${azure.eventGrid.topicName}") String topicName) {
         if (publish) {
             if ((topicName.isEmpty() || batchSize <= 0)) {
                 throw new RuntimeException("Missing EventGrid Configuration");

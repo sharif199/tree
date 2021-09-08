@@ -15,21 +15,29 @@
 package org.opengroup.osdu.storage.provider.azure;
 
 import org.opengroup.osdu.azure.publisherFacade.MessagePublisher;
+import org.opengroup.osdu.azure.publisherFacade.PublisherInfo;
 import org.opengroup.osdu.core.common.model.http.DpsHeaders;
 import org.opengroup.osdu.core.common.model.storage.PubSubInfo;
+import org.opengroup.osdu.storage.provider.azure.di.EventGridConfig;
 import org.opengroup.osdu.storage.provider.azure.di.PubSubConfig;
 import org.opengroup.osdu.storage.provider.interfaces.IMessageBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import java.util.*;
 
 @Component
 public class MessageBusImpl implements IMessageBus {
     private final static Logger LOGGER = LoggerFactory.getLogger(MessageBusImpl.class);
+    private final static String RECORDS_CHANGED_EVENT_SUBJECT = "RecordsChanged";
+    private final static String RECORDS_CHANGED_EVENT_TYPE = "RecordsChanged";
+    private final static String RECORDS_CHANGED_EVENT_DATA_VERSION = "1.0";
     @Autowired
     PubSubConfig pubSubConfig;
+    @Autowired
+    private EventGridConfig eventGridConfig;
     @Autowired
     private MessagePublisher messagePublisher;
 
@@ -39,7 +47,15 @@ public class MessageBusImpl implements IMessageBus {
         final int BATCH_SIZE = Integer.parseInt(pubSubConfig.getPubSubBatchSize());
         for (int i = 0; i < messages.length; i += BATCH_SIZE) {
             PubSubInfo[] batch = Arrays.copyOfRange(messages, i, Math.min(messages.length, i + BATCH_SIZE));
-            messagePublisher.publishMessage(headers,batch);
+            PublisherInfo publisherInfo = PublisherInfo.builder()
+                    .batch(batch)
+                    .eventGridTopicName(eventGridConfig.getTopicName())
+                    .eventGridEventSubject(RECORDS_CHANGED_EVENT_SUBJECT)
+                    .eventGridEventType(RECORDS_CHANGED_EVENT_TYPE)
+                    .eventGridEventDataVersion(RECORDS_CHANGED_EVENT_DATA_VERSION)
+                    .serviceBusTopicName(pubSubConfig.getServiceBusTopic())
+                    .build();
+            messagePublisher.publishMessage(headers, publisherInfo);
         }
     }
 }
