@@ -32,7 +32,7 @@ public class PubSubConfig {
     @Value("${max-lock-renew}")
     private String maxLockRenewDurationInSeconds;
 
-    @Value("${azure.servicebus.topic-name}")
+    @Value("${servicebus.topic-name}")
     private String serviceBusTopic;
 
     @Value("${azure.legal.servicebus.topic-name}")
