@@ -25,7 +25,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.opengroup.osdu.azure.publisherFacade.MessagePublisher;
 import org.opengroup.osdu.core.common.model.http.DpsHeaders;
 import org.opengroup.osdu.core.common.model.storage.PubSubInfo;
+import org.opengroup.osdu.storage.provider.azure.di.EventGridConfig;
 import org.opengroup.osdu.storage.provider.azure.di.PubSubConfig;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -33,10 +35,13 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 @ExtendWith(MockitoExtension.class)
 public class MessageBusImplTest {
+    private static final String TOPIC_NAME = "recordstopic";
     @Mock
     private MessagePublisher messagePublisher;
     @Mock
     private PubSubConfig pubSubConfig;
+    @Mock
+    private EventGridConfig eventGridConfig;
     @Mock
     private DpsHeaders dpsHeaders;
     @InjectMocks
@@ -46,6 +51,8 @@ public class MessageBusImplTest {
     public void init() throws ServiceBusException, InterruptedException {
         initMocks(this);
         doReturn("10").when(pubSubConfig).getPubSubBatchSize();
+        doReturn(TOPIC_NAME).when(eventGridConfig).getTopicName();
+        doReturn(TOPIC_NAME).when(pubSubConfig).getServiceBusTopic();
     }
 
     @Test
@@ -53,13 +60,13 @@ public class MessageBusImplTest {
         // Set Up
         String[] ids = {"id1", "id2", "id3", "id4", "id5", "id6", "id7", "id8", "id9", "id10", "id11"};
         String[] kinds = {"kind1", "kind2", "kind3", "kind4", "kind5", "kind6", "kind7", "kind8", "kind9", "kind10", "kind11"};
-        doNothing().when(messagePublisher).publishMessage(any(), any());
+        doNothing().when(messagePublisher).publishMessage(eq(dpsHeaders), any());
 
         PubSubInfo[] pubSubInfo = new PubSubInfo[11];
         for (int i = 0; i < ids.length; ++i) {
             pubSubInfo[i] = getPubsInfo(ids[i], kinds[i]);
-            sut.publishMessage(dpsHeaders, pubSubInfo[i]);
         }
+        sut.publishMessage(dpsHeaders, pubSubInfo);
     }
 
     private PubSubInfo getPubsInfo(String id, String kind) {
