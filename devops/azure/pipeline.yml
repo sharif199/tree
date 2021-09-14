@@ -76,7 +76,7 @@ stages:
       chartPath: ${{ variables.chartPath }}
       valuesFile: ${{ variables.valuesFile }}
       testCoreMavenPomFile: 'testing/storage-test-core/pom.xml'
-      testCoreMavenOptions: '--settings $(System.DefaultWorkingDirectory)/drop/deploy/testing/maven/settings.xml'
+      testCoreMavenOptions: '--settings $(System.DefaultWorkingDirectory)/drop/deploy/testing/maven/settings.xml -Dmaven.repo.local=$(MAVEN_CACHE_FOLDER)'
       skipDeploy: ${{ variables.SKIP_DEPLOY }}
       skipTest: ${{ variables.SKIP_TESTS }}
       providers:
