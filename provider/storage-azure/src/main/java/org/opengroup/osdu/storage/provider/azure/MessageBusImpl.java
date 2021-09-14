@@ -20,6 +20,7 @@ import org.opengroup.osdu.core.common.model.http.DpsHeaders;
 import org.opengroup.osdu.core.common.model.storage.PubSubInfo;
 import org.opengroup.osdu.storage.provider.azure.di.EventGridConfig;
 import org.opengroup.osdu.storage.provider.azure.di.PubSubConfig;
+import org.opengroup.osdu.storage.provider.azure.di.PublisherConfig;
 import org.opengroup.osdu.storage.provider.interfaces.IMessageBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,11 +41,13 @@ public class MessageBusImpl implements IMessageBus {
     private EventGridConfig eventGridConfig;
     @Autowired
     private MessagePublisher messagePublisher;
+    @Autowired
+    private PublisherConfig publisherConfig;
 
     @Override
     public void publishMessage(DpsHeaders headers, PubSubInfo... messages) {
         // The batch size is same for both Event grid and Service bus.
-        final int BATCH_SIZE = Integer.parseInt(pubSubConfig.getPubSubBatchSize());
+        final int BATCH_SIZE = Integer.parseInt(publisherConfig.getPubSubBatchSize());
         for (int i = 0; i < messages.length; i += BATCH_SIZE) {
             PubSubInfo[] batch = Arrays.copyOfRange(messages, i, Math.min(messages.length, i + BATCH_SIZE));
             PublisherInfo publisherInfo = PublisherInfo.builder()

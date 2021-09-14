@@ -27,6 +27,7 @@ import org.opengroup.osdu.core.common.model.http.DpsHeaders;
 import org.opengroup.osdu.core.common.model.storage.PubSubInfo;
 import org.opengroup.osdu.storage.provider.azure.di.EventGridConfig;
 import org.opengroup.osdu.storage.provider.azure.di.PubSubConfig;
+import org.opengroup.osdu.storage.provider.azure.di.PublisherConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -43,6 +44,8 @@ public class MessageBusImplTest {
     @Mock
     private EventGridConfig eventGridConfig;
     @Mock
+    private PublisherConfig publisherConfig;
+    @Mock
     private DpsHeaders dpsHeaders;
     @InjectMocks
     private MessageBusImpl sut;
@@ -50,7 +53,7 @@ public class MessageBusImplTest {
     @Before
     public void init() throws ServiceBusException, InterruptedException {
         initMocks(this);
-        doReturn("10").when(pubSubConfig).getPubSubBatchSize();
+        doReturn("10").when(publisherConfig).getPubSubBatchSize();
         doReturn(TOPIC_NAME).when(eventGridConfig).getTopicName();
         doReturn(TOPIC_NAME).when(pubSubConfig).getServiceBusTopic();
     }
