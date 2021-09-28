@@ -2,9 +2,11 @@
 global:
 
   # Service(s) Replica Count
-  replicaCount: 10
+  replicaCount: 30
+  maxReplicaCount: 30
+  minReplicaCount: 30
   nodepool: services
-  isAutoscalingEnabled: false
+  isAutoscalingEnabled: #{IS_AUTOSCALING_ENABLED}#
 
 ################################################################################
 # Specify the Gitlab branch being used for image creation
@@ -21,4 +23,16 @@ policy:
 schemaEndpoints:
   disabled: #{SCHEMA_ENDPOINTS_DISABLED}#
 
-istioDnsHost: #{ISTIO_DNS_HOST}# 
+istioDnsHost: #{ISTIO_DNS_HOST}#
+
+env: #{ENVIRONMENT_NAME}#
+
+featureFlag:
+  resourceLimits:
+    enabledEnvs:
+    - dev
+    - qa
+  hpa:
+    enabledEnvs:
+    - dev
+    - qa

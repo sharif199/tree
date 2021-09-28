@@ -14,6 +14,8 @@
 
 global:
   replicaCount: 1
+  maxReplicaCount: 1
+  minReplicaCount: 1
   nodepool: services
   isAutoscalingEnabled: false
 
@@ -28,4 +30,14 @@ policy:
 schemaEndpoints:
   disabled: false
 
-istioDnsHost: "" 
+istioDnsHost: ""
+
+env: demo
+
+featureFlag:
+  resourceLimits:
+    enabledEnvs:
+    - demo
+  hpa:
+    enabledEnvs:
+    - demo
