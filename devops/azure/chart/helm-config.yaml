@@ -3,8 +3,8 @@ global:
 
   # Service(s) Replica Count
   replicaCount: 30
-  maxReplicaCount: 30
-  minReplicaCount: 30
+  maxReplicaCount: 50
+  minReplicaCount: 4
   nodepool: services
   isAutoscalingEnabled: #{IS_AUTOSCALING_ENABLED}#
 
@@ -30,9 +30,7 @@ env: #{ENVIRONMENT_NAME}#
 featureFlag:
   resourceLimits:
     enabledEnvs:
-    - dev
-    - qa
+    - demo
   hpa:
     enabledEnvs:
-    - dev
-    - qa
+    - demo
