@@ -32,5 +32,4 @@ featureFlag:
     enabledEnvs:
     - demo
   hpa:
-    enabledEnvs:
-    - demo
+    enabledEnvs: []
