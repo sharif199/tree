@@ -10,7 +10,7 @@ variables:
   AWS_MONGODB_TEST_SUBDIR: testing/storage-test-aws-mongodb
   AWS_MONGODB_SERVICE: storage
   AWS_MONGODB_ENVIRONMENT: dev
-  AWS_MONGODB_SKIP_TESTS: 'true'
+  AWS_MONGODB_SKIP_TESTS: "true"
 
   GCP_BUILD_SUBDIR: provider/storage-gcp
   GCP_INT_TEST_SUBDIR: testing/storage-test-gcp
@@ -63,11 +63,12 @@ include:
   - project: "osdu/platform/ci-cd-pipelines"
     file: "cloud-providers/ibm.yml"
 
-  - project: 'osdu/platform/ci-cd-pipelines'
+  - project: "osdu/platform/ci-cd-pipelines"
+    ref: "gcp-update-common-vars-file"
     file: "cloud-providers/osdu-gcp-gke.yml"
 
-  - project: 'osdu/platform/ci-cd-pipelines'
-    file: 'publishing/pages.yml'
+  - project: "osdu/platform/ci-cd-pipelines"
+    file: "publishing/pages.yml"
 
   - project: "osdu/platform/ci-cd-pipelines"
     file: "scanners/gitlab-ultimate.yml"
@@ -75,8 +76,8 @@ include:
   - project: "osdu/platform/ci-cd-pipelines"
     file: "cloud-providers/azure.yml"
 
-  - project: 'osdu/platform/ci-cd-pipelines'
-    file: 'cloud-providers/aws-mongodb.yml'
+  - project: "osdu/platform/ci-cd-pipelines"
+    file: "cloud-providers/aws-mongodb.yml"
 
 # disable the eslint scanner
 # I think this is being generated from the presence of an HTML file, but there
