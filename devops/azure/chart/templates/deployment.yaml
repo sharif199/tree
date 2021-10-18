@@ -48,6 +48,7 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 80
+        # Resource limits are set https://community.opengroup.org/osdu/platform/deployment-and-operations/infra-azure-provisioning/-/blob/master/charts/osdu-common/templates/resource-limits.yaml
         # Upgrade to SpringBoot 2.3 for actuator k8s support with readiness and liveness endpoints
         # More info https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-application-availability
         readinessProbe:
