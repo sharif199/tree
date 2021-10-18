@@ -48,15 +48,6 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 80
-        {{- if has .Values.env .Values.featureFlag.resourceLimits.enabledEnvs }}
-        resources:
-          requests:
-            cpu: "500m"
-            memory: "4Gi"
-          limits:
-            cpu: "1000m"
-            memory: "4Gi"
-        {{- end }}
         # Upgrade to SpringBoot 2.3 for actuator k8s support with readiness and liveness endpoints
         # More info https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-application-availability
         readinessProbe:
