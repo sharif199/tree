@@ -176,7 +176,6 @@
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
             <scope>runtime</scope>
-            <version>1.6.6</version>
         </dependency>
     </dependencies>
 
