@@ -120,6 +120,26 @@ public class PersistenceServiceImplTest {
     }
 
     @Test
+    public void should_notPersistRecords_and_throwAppException_when_DatastoreErrorOccur() {
+
+        TransferBatch batch = this.createBatchTransfer();
+
+        this.setupRecordRepository(23, 10, 25);
+        doThrow(new AppException(413, "Datastore exception", "Unable to process records")).when(this.recordRepository).createOrUpdate(any());
+
+        try {
+            this.sut.persistRecordBatch(batch);
+            fail("Expected exception");
+        } catch (AppException e) {
+            assertEquals(413, e.getError().getCode());
+        }
+
+        ArgumentCaptor<List> datastoreCaptor = ArgumentCaptor.forClass(List.class);
+        verify(this.recordRepository, times(1)).createOrUpdate(datastoreCaptor.capture());
+        verify(this.pubSubClient, times(0)).publishMessage(any());
+    }
+
+    @Test
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public void should_notPersistRecords_and_throw500AppException_when_nonDatastoreErrorOccur() {
 
