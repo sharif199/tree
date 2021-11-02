@@ -62,7 +62,7 @@ public abstract class TestUtils {
     }
 
     public static final String getAcl() {
-        return String.format("data.test1@%s", getAclSuffix());
+        return String.format("data.default.owners@%s", getAclSuffix());
     }
 
     public static final String getEntV2OnlyAcl() {
