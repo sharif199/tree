@@ -64,7 +64,7 @@ public class PersistenceServiceImpl implements IPersistenceService {
 			RecordProcessing processing = recordsProcessing.get(i);
 			RecordMetadata recordMetadata = processing.getRecordMetadata();
 			recordsMetadata.add(recordMetadata);
-			pubsubInfo[i] = new PubSubInfo(recordMetadata.getId(), recordMetadata.getKind(), OperationType.create);
+			pubsubInfo[i] = new PubSubInfo(recordMetadata.getId(), recordMetadata.getKind(), processing.getOperationType(), processing.getKind());
 		}
 
 		this.commitBatch(recordsProcessing, recordsMetadata);
@@ -88,7 +88,7 @@ public class PersistenceServiceImpl implements IPersistenceService {
 	}
 
 	@Override
-	public List<String> updateMetadata(List<RecordMetadata> recordMetadata, List<String> recordsId, Map<String, String> recordsIdMap) {
+	public List<String> updateMetadata(List<RecordMetadata> recordMetadata, List<String> recordsId, Map<String, String> recordsIdMap, String previousKind) {
 		Map<String, Acl> originalAcls = new HashMap<>();
 		List<String> lockedRecords = new ArrayList<>();
 		List<RecordMetadata> validMetadata = new ArrayList<>();
@@ -111,7 +111,7 @@ public class PersistenceServiceImpl implements IPersistenceService {
 		PubSubInfo[] pubsubInfo = new PubSubInfo[recordMetadata.size()];
 		for (int i = 0; i < recordMetadata.size(); i++) {
 			RecordMetadata metadata = recordMetadata.get(i);
-			pubsubInfo[i] = new PubSubInfo(metadata.getId(), metadata.getKind(), OperationType.create);
+			pubsubInfo[i] = new PubSubInfo(metadata.getId(), metadata.getKind(), OperationType.create, previousKind);
 		}
 		this.pubSubClient.publishMessage(this.headers, pubsubInfo);
 		return lockedRecords;

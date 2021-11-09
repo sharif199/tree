@@ -99,7 +99,7 @@ public class SchemaServiceImpl implements SchemaService {
 
             this.cache.put(this.getSchemaCacheKey(inputSchema.getKind()), schema);
             this.pubSubClient.publishMessage(this.headers,
-                    new PubSubInfo(null, inputSchema.getKind(), OperationType.create_schema));
+                    new PubSubInfo(null, inputSchema.getKind(), OperationType.create_schema, inputSchema.getKind()));
 
         } catch (IllegalArgumentException e) {
             throw new AppException(HttpStatus.SC_CONFLICT, "Schema already registered",
@@ -131,7 +131,7 @@ public class SchemaServiceImpl implements SchemaService {
 
         this.cache.delete(this.getSchemaCacheKey(kind));
         this.pubSubClient.publishMessage(this.headers,
-                new PubSubInfo(null, schema.getKind(), OperationType.purge_schema));
+                new PubSubInfo(null, schema.getKind(), OperationType.purge_schema, schema.getKind()));
     }
 
     @Override

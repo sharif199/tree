@@ -103,7 +103,7 @@ public class RecordServiceImpl implements RecordService {
 
         this.auditLogger.purgeRecordSuccess(singletonList(recordId));
         this.pubSubClient.publishMessage(this.headers,
-                new PubSubInfo(recordId, recordMetadata.getKind(), OperationType.delete));
+                new PubSubInfo(recordId, recordMetadata.getKind(), OperationType.delete, recordMetadata.getKind()));
     }
 
     @Override
@@ -123,7 +123,7 @@ public class RecordServiceImpl implements RecordService {
         this.recordRepository.createOrUpdate(recordsMetadata);
         this.auditLogger.deleteRecordSuccess(singletonList(recordId));
 
-        PubSubInfo pubSubInfo = new PubSubInfo(recordId, recordMetadata.getKind(), OperationType.delete);
+        PubSubInfo pubSubInfo = new PubSubInfo(recordId, recordMetadata.getKind(), OperationType.delete, recordMetadata.getKind());
         this.pubSubClient.publishMessage(this.headers, pubSubInfo);
     }
 
@@ -163,7 +163,7 @@ public class RecordServiceImpl implements RecordService {
 
     private void publishDeletedRecords(List<RecordMetadata> records) {
         List<PubSubInfo> messages = records.stream()
-            .map(recordMetadata -> new PubSubInfo(recordMetadata.getId(), recordMetadata.getKind(), OperationType.delete))
+            .map(recordMetadata -> new PubSubInfo(recordMetadata.getId(), recordMetadata.getKind(), OperationType.delete, recordMetadata.getKind()))
             .collect(Collectors.toList());
         pubSubClient.publishMessage(headers, messages.toArray(new PubSubInfo[messages.size()]));
     }

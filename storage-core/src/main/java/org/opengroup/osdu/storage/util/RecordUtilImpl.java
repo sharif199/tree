@@ -48,6 +48,8 @@ public class RecordUtilImpl implements RecordUtil {
     private static final String OWNERS = "owners";
     private static final String ERROR_MSG = "Cannot delete";
     private static final String ERROR_REASON = "Cannot remove all ";
+    private static final String INVALID_OPERATION = "Invalid operation";
+    private static final String INVALID_INPUT = "Invalid input";
 
     private final TenantInfo tenant;
     private final Gson gson;
@@ -106,6 +108,13 @@ public class RecordUtilImpl implements RecordUtil {
                 .collect(toList());
         if (aclOperation.size() > 0) {
             recordMetadata = updateMetadataForAclAndLegal(recordMetadata, aclOperation);
+        }
+
+        List<PatchOperation> kindOperation = ops.stream()
+                .filter(operation -> operation.getPath().startsWith("/kind"))
+                .collect(toList());
+        if(kindOperation.size() > 0) {
+            updateMetadataForKind(recordMetadata, kindOperation);
         }
 
         recordMetadata.setModifyUser(user);
@@ -242,6 +251,20 @@ public class RecordUtilImpl implements RecordUtil {
             } else if (PATCH_OPERATION_REMOVE.equals((operation.getOp()))) {
                 Stream.of(operation.getValue())
                         .forEach(recordMetadata.getTags()::remove);
+            }
+        }
+    }
+
+    private void updateMetadataForKind(RecordMetadata recordMetadata, List<PatchOperation> ops) {
+        for (PatchOperation operation : ops) {
+            if(PATCH_OPERATION_REPLACE.equals(operation.getOp())) {
+                if(operation.getValue().length == 1) {
+                    recordMetadata.setKind(operation.getValue()[0]);
+                } else {
+                    throw new AppException(HttpStatus.SC_BAD_REQUEST, INVALID_INPUT, "Must be exactly 1 kind to replace with");
+                }
+            } else {
+                throw new AppException(HttpStatus.SC_BAD_REQUEST, INVALID_OPERATION, "Cannot add or delete kind, it can only be replaced");
             }
         }
     }

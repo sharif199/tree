@@ -139,7 +139,7 @@ public class SchemaServiceImplTest {
         verify(this.schemaRepository).add(schema, USER);
         verify(this.cacheService).put("EUerYg==", schema);
         verify(this.pubSubClient).publishMessage(this.headers,
-                new PubSubInfo(null, KIND, OperationType.create_schema));
+                new PubSubInfo(null, KIND, OperationType.create_schema, KIND));
     }
 
     @Test

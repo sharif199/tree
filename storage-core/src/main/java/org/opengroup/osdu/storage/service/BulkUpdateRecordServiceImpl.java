@@ -99,9 +99,15 @@ public class BulkUpdateRecordServiceImpl implements BulkUpdateRecordService {
                 : this.validateUserAccessAndComplianceConstraints(bulkUpdateOps, idMap, existingRecords);
 
         final long currentTimestamp = clock.millis();
+        String previousKind = "";
         for (String id : idsWithoutVersion) {
             String idWithVersion = idMap.get(id);
             RecordMetadata metadata = existingRecords.get(id);
+
+            //TODO: Can different IDs have different kinds in this scenario?
+            if(metadata != null) {
+                previousKind = metadata.getKind();
+            }
 
             if (metadata == null) {
                 notFoundRecordIds.add(idWithVersion);
@@ -118,7 +124,7 @@ public class BulkUpdateRecordServiceImpl implements BulkUpdateRecordService {
         }
 
         if (!validRecordsId.isEmpty()) {
-            lockedRecordsId = persistenceService.updateMetadata(validRecordsMetadata, validRecordsId, idMap);
+            lockedRecordsId = persistenceService.updateMetadata(validRecordsMetadata, validRecordsId, idMap, previousKind);
         }
 
         for (String lockedId : lockedRecordsId) {

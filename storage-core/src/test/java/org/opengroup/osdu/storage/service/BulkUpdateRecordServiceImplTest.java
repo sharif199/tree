@@ -18,6 +18,8 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -108,7 +110,7 @@ public class BulkUpdateRecordServiceImplTest {
         BulkUpdateRecordsResponse actualResponse = service.bulkUpdateRecords(param, TEST_USER);
 
         commonVerify(singletonList(TEST_ID), param.getOps());
-        verify(persistenceService, only()).updateMetadata(singletonList(recordMetadata), TEST_IDS, IDS_VERSION_MAP);
+        verify(persistenceService, only()).updateMetadata(singletonList(recordMetadata), TEST_IDS, IDS_VERSION_MAP, recordMetadata.getKind());
         verifyZeroInteractions(auditLogger);
 
         assertEquals(TEST_ID, actualResponse.getRecordIds().get(0));
@@ -166,7 +168,7 @@ public class BulkUpdateRecordServiceImplTest {
 
         BulkUpdateRecordsResponse actualResponse = service.bulkUpdateRecords(param, TEST_USER);
 
-        verify(persistenceService, only()).updateMetadata(singletonList(recordMetadata), TEST_IDS, IDS_VERSION_MAP);
+        verify(persistenceService, only()).updateMetadata(singletonList(recordMetadata), TEST_IDS, IDS_VERSION_MAP, recordMetadata.getKind());
         verify(auditLogger, only()).createOrUpdateRecordsFail(TEST_IDS);
 
         assertEquals(TEST_ID, actualResponse.getLockedRecordIds().get(0));
@@ -200,8 +202,13 @@ public class BulkUpdateRecordServiceImplTest {
                              boolean isLockedRecord) {
         when(recordUtil.mapRecordsAndVersions(TEST_IDS)).thenReturn(IDS_VERSION_MAP);
         when(recordRepository.get(TEST_IDS)).thenReturn(recordMetadataMap);
-        when(persistenceService.updateMetadata(singletonList(recordMetadataMap.get(TEST_ID)), TEST_IDS, IDS_VERSION_MAP))
-                .thenReturn(isLockedRecord ? new ArrayList<>(singletonList(TEST_ID)) : emptyList());
+        if (recordMetadataMap.get(TEST_ID) != null) {
+            when(persistenceService.updateMetadata(singletonList(recordMetadataMap.get(TEST_ID)), TEST_IDS, IDS_VERSION_MAP, recordMetadataMap.get(TEST_ID).getKind()))
+                    .thenReturn(isLockedRecord ? new ArrayList<>(singletonList(TEST_ID)) : emptyList());
+        } else {
+            when(persistenceService.updateMetadata(singletonList(recordMetadataMap.get(TEST_ID)), TEST_IDS, IDS_VERSION_MAP, ""))
+                    .thenReturn(isLockedRecord ? new ArrayList<>(singletonList(TEST_ID)) : emptyList());
+        }
         when(clock.millis()).thenReturn(CURRENT_MILLIS);
         when(entitlementsAndCacheService.hasOwnerAccess(headers, OWNERS)).thenReturn(hasOwnerAccess);
         when(recordUtil.updateRecordMetaDataForPatchOperations(recordMetadataMap.get(TEST_ID), patchOperations, TEST_USER,

@@ -156,7 +156,7 @@ public class RecordServiceImplTest {
 
         verify(this.cloudStorage).delete(record);
 
-        PubSubInfo pubsubMsg = new PubSubInfo(RECORD_ID, "any kind", OperationType.delete);
+        PubSubInfo pubsubMsg = new PubSubInfo(RECORD_ID, "any kind", OperationType.delete, "any kind");
 
         verify(this.pubSubClient).publishMessage(this.headers, pubsubMsg);
     }

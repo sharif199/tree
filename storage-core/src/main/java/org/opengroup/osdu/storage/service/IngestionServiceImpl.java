@@ -188,7 +188,7 @@ public class IngestionServiceImpl implements IngestionService {
 				recordMetadata.setCreateTime(currentTimestamp);
 				recordMetadata.addGcsPath(transfer.getVersion());
 
-				recordsToProcess.add(new RecordProcessing(recordData, recordMetadata, OperationType.create));
+				recordsToProcess.add(new RecordProcessing(recordData, recordMetadata, OperationType.create, recordMetadata.getKind()));
 			} else {
 				RecordMetadata existingRecordMetadata = existingRecords.get(record.getId());
 				RecordMetadata updatedRecordMetadata = new RecordMetadata(record);
@@ -206,15 +206,14 @@ public class IngestionServiceImpl implements IngestionService {
                 } else {
                     recordUpdatesMap.put(updatedRecordMetadata, recordData);
                 }
+				if (skipDupes && recordUpdatesMap.size() > 0) {
+					this.removeDuplicatedRecords(recordUpdatesMap, transfer);
+				}
+				recordUpdatesMap.putAll(recordUpdateWithoutVersions);
+				this.populateUpdatedRecords(recordUpdatesMap, recordsToProcess, transfer, currentTimestamp, existingRecordMetadata.getKind());
 			}
 		});
 
-		if (skipDupes && recordUpdatesMap.size() > 0) {
-			this.removeDuplicatedRecords(recordUpdatesMap, transfer);
-		}
-		recordUpdatesMap.putAll(recordUpdateWithoutVersions);
-
-		this.populateUpdatedRecords(recordUpdatesMap, recordsToProcess, transfer, currentTimestamp);
 		return recordsToProcess;
 	}
 
@@ -298,7 +297,7 @@ public class IngestionServiceImpl implements IngestionService {
 	}
 
 	private void populateUpdatedRecords(Map<RecordMetadata, RecordData> recordUpdatesMap,
-			List<RecordProcessing> recordsToProcess, TransferInfo transfer, long timestamp) {
+			List<RecordProcessing> recordsToProcess, TransferInfo transfer, long timestamp, String originalKind) {
 		for (Map.Entry<RecordMetadata, RecordData> recordEntry : recordUpdatesMap.entrySet()) {
 			RecordMetadata recordMetadata = recordEntry.getKey();
 			recordMetadata.addGcsPath(transfer.getVersion());
@@ -308,7 +307,7 @@ public class IngestionServiceImpl implements IngestionService {
 
 			RecordData recordData = recordEntry.getValue();
 
-			recordsToProcess.add(new RecordProcessing(recordData, recordMetadata, OperationType.update));
+			recordsToProcess.add(new RecordProcessing(recordData, recordMetadata, OperationType.update, originalKind));
 		}
 	}
 
