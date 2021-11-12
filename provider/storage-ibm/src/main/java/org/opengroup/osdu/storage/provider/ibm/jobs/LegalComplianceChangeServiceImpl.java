@@ -107,7 +107,7 @@ public class LegalComplianceChangeServiceImpl implements ILegalComplianceChangeS
 		for (RecordMetadata rm : recordMetadata) {
 			rm.getLegal().setStatus(complianceChangeInfo.getNewState());
 			rm.setStatus(complianceChangeInfo.getNewRecordState());
-			pubsubInfo[i] = new PubSubInfo(rm.getId(), rm.getKind(), complianceChangeInfo.getPubSubEvent());
+			pubsubInfo[i] = new PubSubInfo(rm.getId(), rm.getKind(), complianceChangeInfo.getPubSubEvent(), rm.getKind());
 			output.put(rm.getId(), complianceChangeInfo.getNewState());
 			i++;
 		}
