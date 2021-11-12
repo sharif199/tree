@@ -51,8 +51,8 @@ public class TestRecordsApiAcceptance extends RecordsApiAcceptanceTests {
 
     @Test
     public void should_createNewRecords_whenTheyHaveSameFirst100Characters() throws Exception {
-        final String RECORDID_1 = TenantUtils.getTenantName() + ":marker:hij-osdu-dev-sis-internal-hq-techlog--A52C-4031-99D1---124CBB92-8C80-4668-BB48-1329C5FE241C--1";
-        final String RECORDID_2 = TenantUtils.getTenantName() + ":marker:hij-osdu-dev-sis-internal-hq-techlog--A52C-4031-99D1---124CBB92-8C80-4668-BB48-1329C5FE241C--9";
+        final String RECORDID_1 = TenantUtils.getTenantName() + ":marker:hij-osdu-dev-sis-internal-hq-techlog--A52C-4031-99D1---124CBB92-8C80-4668-BB48-1329C5FE241C--1" + System.currentTimeMillis();
+        final String RECORDID_2 = TenantUtils.getTenantName() + ":marker:hij-osdu-dev-sis-internal-hq-techlog--A52C-4031-99D1---124CBB92-8C80-4668-BB48-1329C5FE241C--9" + System.currentTimeMillis();
 
         String jsonInput = "[" + singleEntityBody(RECORDID_1, "TestCreation", KIND, LEGAL_TAG) + "," + singleEntityBody(RECORDID_2, "TestCreation", KIND, LEGAL_TAG) + "]";
         ClientResponse response = TestUtils.send("records", "PUT", HeaderUtils.getHeaders(TenantUtils.getTenantName(), testUtils.getToken()), jsonInput, "");
