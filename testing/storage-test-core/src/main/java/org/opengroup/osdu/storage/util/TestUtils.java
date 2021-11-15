@@ -65,6 +65,10 @@ public abstract class TestUtils {
         return String.format("data.default.owners@%s", getAclSuffix());
     }
 
+    public static final String getInvalidAcl() {
+        return String.format("data.default.invalid@%s", getAclSuffix());
+    }
+
     public static final String getEntV2OnlyAcl() {
         return String.format("data.storage-integration-test-acl.ent-v2@%s", getAclSuffix());
     }
