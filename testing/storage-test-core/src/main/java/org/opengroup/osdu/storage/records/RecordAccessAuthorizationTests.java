@@ -14,8 +14,6 @@
 
 package org.opengroup.osdu.storage.records;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.Map;
 
 import org.apache.http.HttpStatus;
@@ -27,11 +25,14 @@ import com.google.gson.JsonParser;
 import org.opengroup.osdu.storage.util.*;
 import com.sun.jersey.api.client.ClientResponse;
 
+import static org.junit.Assert.*;
+
 public abstract class RecordAccessAuthorizationTests extends TestBase {
 
 	protected static long NOW = System.currentTimeMillis();
 	protected static String LEGAL_TAG = LegalTagUtils.createRandomName();
 	protected static String KIND = TenantUtils.getTenantName() + ":dataaccess:no:1.1." + NOW;
+	protected static String KIND2 = TenantUtils.getTenantName() + ":dataaccess:no:1.12." + NOW;
 	protected static String RECORD_ID = TenantUtils.getTenantName() + ":no:1.1." + NOW;
 
 	public static void classSetup(String token) throws Exception {
@@ -104,11 +105,7 @@ public abstract class RecordAccessAuthorizationTests extends TestBase {
 
 		ClientResponse response = TestUtils.send("records/" + RECORD_ID, "DELETE", headers, "", "");
 
-        assertEquals(HttpStatus.SC_FORBIDDEN, response.getStatus());
-        JsonObject json = new JsonParser().parse(response.getEntity(String.class)).getAsJsonObject();
-        assertEquals(403, json.get("code").getAsInt());
-        assertEquals("Access denied", json.get("reason").getAsString());
-        assertEquals("The user is not authorized to purge the record", json.get("message").getAsString());
+		this.assertNotAuthorized(response);
     }
 
 	@Test
@@ -130,10 +127,10 @@ public abstract class RecordAccessAuthorizationTests extends TestBase {
 		String newRecordId = TenantUtils.getTenantName() + ":no:2.2." + NOW;
 
 		Map<String, String> headers = HeaderUtils.getHeaders(TenantUtils.getTenantName(),
-				testUtils.getNoDataAccessToken());
+				testUtils.getToken());
 
 		ClientResponse response = TestUtils.send("records", "PUT", headers,
-				RecordUtil.createDefaultJsonRecord(newRecordId, KIND, LEGAL_TAG), "");
+				RecordUtil.createDefaultJsonRecordWithInvalidAcl(newRecordId, KIND2, LEGAL_TAG), "");
 
 		assertEquals(HttpStatus.SC_CREATED, response.getStatus());
 
@@ -151,17 +148,23 @@ public abstract class RecordAccessAuthorizationTests extends TestBase {
 
 		DummyRecordsHelper.RecordsMock responseObject = new DummyRecordsHelper().getRecordsMockFromResponse(response);
 
-		assertEquals(0, responseObject.records.length);
+		assertEquals(1, responseObject.records.length);
 		assertEquals(0, responseObject.invalidRecords.length);
 		assertEquals(0, responseObject.retryRecords.length);
+
+		response = TestUtils.send("records/" + newRecordId, "GET", HeaderUtils.getHeaders(TenantUtils.getTenantName(), testUtils.getToken()), "", "");
+
+		// Should get 403 due to lack of access
+		assertEquals(HttpStatus.SC_FORBIDDEN, response.getStatus());
 
 		TestUtils.send("records/" + newRecordId, "DELETE", headers, "", "");
 	}
 
 	protected void assertNotAuthorized(ClientResponse response) {
-		assertEquals(HttpStatus.SC_FORBIDDEN, response.getStatus());
+		assertTrue("Status code is " + response.getStatus(),
+				response.getStatus() == 403 || response.getStatus() == 401);
 		JsonObject json = new JsonParser().parse(response.getEntity(String.class)).getAsJsonObject();
-		assertEquals(403, json.get("code").getAsInt());
+		assertTrue(json.get("code").getAsInt() == 403 || json.get("code").getAsInt() == 401);
 		assertEquals("Access denied", json.get("reason").getAsString());
 		assertEquals("The user is not authorized to perform this action", json.get("message").getAsString());
 	}

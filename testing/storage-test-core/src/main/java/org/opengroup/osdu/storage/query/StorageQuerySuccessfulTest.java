@@ -50,19 +50,6 @@ public abstract class StorageQuerySuccessfulTest extends TestBase {
 
     	LegalTagUtils.delete(LEGAL_TAG_NAME, token);
     }
-	
-	@Test
-	public void should_retrieveAllKinds_when_toCursorIdIsGiven() throws Exception {
-		ClientResponse recordResponse = TestUtils.send("query/kinds?limit=10", HttpMethod.GET, HeaderUtils.getHeaders(TenantUtils.getTenantName(), testUtils.getToken()),
-				"", "");
-		GetCursorValue getCursorValue = TestUtils.getResult(recordResponse, HttpStatus.SC_OK, GetCursorValue.class);
-		String cursorValue = getCursorValue.getCursor();
-		assertEquals(HttpStatus.SC_OK, recordResponse.getStatus());
-		assertEquals(cursorValue, getCursorValue.getCursor());
-		ClientResponse recordResponseWithCursorValue = TestUtils.send("query/kinds?cursor=" + cursorValue + "&limit=10",
-				HttpMethod.GET, HeaderUtils.getHeaders(TenantUtils.getTenantName(), testUtils.getToken()), "", "");
-		assertEquals(HttpStatus.SC_OK, recordResponseWithCursorValue.getStatus());
-	}
 
 	@Test
 	public void should_retrieveAllRecords_when_kindIsGiven() throws Exception {
