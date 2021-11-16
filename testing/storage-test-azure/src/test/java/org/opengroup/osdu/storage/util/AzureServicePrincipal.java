@@ -71,6 +71,7 @@ public class AzureServicePrincipal {
         for (Map.Entry<String, String> entry : params.entrySet()) {
             result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
             result.append("=");
+            System.out.println(entry.getKey());
             result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
             result.append("&");
         }
