@@ -24,6 +24,7 @@ import static org.mockito.Mockito.when;
 import javax.validation.ConstraintValidatorContext;
 import javax.validation.ConstraintValidatorContext.ConstraintViolationBuilder;
 
+import io.jsonwebtoken.lang.Collections;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,6 +37,7 @@ import org.opengroup.osdu.core.common.model.storage.RecordAncestry;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.opengroup.osdu.core.common.model.legal.validation.LegalValidator;
 import org.opengroup.osdu.core.common.model.storage.validation.ValidationDoc;
+import org.opengroup.osdu.core.common.model.validation.ValidatorUtils;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LegalValidatorTest {
@@ -58,7 +60,7 @@ public class LegalValidatorTest {
     @Test
     public void should_returnFalse_when_parentRecordIdDoesNotFollowRecordVersionNamingConvetion() {
 
-        final String EXPECTED_MSG = "Invalid parent record format: 'record:without:version'. The following format is expected: {record-id}:{record-version}";
+        final String EXPECTED_MSG = "Invalid parent record version: 'record:without:version'. Record version must be a numeric value";
 
         when(this.context.buildConstraintViolationWithTemplate(EXPECTED_MSG)).thenReturn(this.constraintBuilder);
 
