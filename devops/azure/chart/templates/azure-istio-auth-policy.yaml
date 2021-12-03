@@ -34,4 +34,13 @@ spec:
                        "*/actuator/health", "*/health",
                        "*/configuration/ui","*/configuration/security",
                        "/api/{{ .Chart.Name }}/v2/swagger-resources/*",
-                       "/api/{{ .Chart.Name }}/v2/webjars/*"]
+                       "/api/{{ .Chart.Name }}/v2/webjars/*",
+                       "*/swagger",
+                       "*/api-docs",
+                       "*/swagger-resources",
+                       "*/swagger-ui/index.html",
+                       "*/swagger-ui.html",
+                       "/v3/api-docs/swagger-config",
+                       "api/file/swagger-config/*",
+                       "api/file/swagger-ui/*",
+                       "*/swagger-ui/*"]

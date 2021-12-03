@@ -40,6 +40,10 @@ public class AADSecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
                 .antMatchers("/", "/index.html",
                         "/v2/api-docs",
+                        "/v3/api-docs",
+                        "*/api-docs",
+                        "/swagger-ui/index.html",
+                        "*/swagger-ui.html",
                         "/configuration/ui",
                         "/swagger-resources/**",
                         "/configuration/security",
