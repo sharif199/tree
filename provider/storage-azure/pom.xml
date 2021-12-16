@@ -34,7 +34,7 @@
         <azure.appservice.appname />
         <azure.appservice.subscription />
         <osdu.storage-core.version>0.11.0</osdu.storage-core.version>
-        <osdu.corelibazure.version>0.12.0-rc10</osdu.corelibazure.version>
+        <osdu.corelibazure.version>0.13.0-rc5</osdu.corelibazure.version>
         <junit.version>4.12</junit.version>
         <mockito.version>1.10.19</mockito.version>
         <powermock.version>2.0.2</powermock.version>
