@@ -18,7 +18,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>compliance</groupId>
     <artifactId>compliance</artifactId>
-    <version>0.12.1-SNAPSHOT</version>
+    <version>0.12.1</version>
     <packaging>jar</packaging>
     <name>Compliance Trigger Function</name>
     <properties>
