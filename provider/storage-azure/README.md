@@ -42,7 +42,7 @@ az keyvault secret show --vault-name $KEY_VAULT_NAME --name $KEY_VAULT_SECRET_NA
 | `runtime.env.local` | false (change this to `true` when running locally) | Var to check if app is running locally | no | - |
 | `LOG_PREFIX` | `storage` | Logging prefix | no | - |
 | `server.servlet.contextPath` | `/api/storage/v2/` | Servlet context path | no | - |
-| `AUTHORIZE_API` | ex `https://foo-entitlements.azurewebsites.net/entitlements/v1` | Entitlements API endpoint | no | output of infrastructure deployment |
+| `AUTHORIZE_API` | ex `https://foo-entitlements.azurewebsites.net/api/entitlements/v2` | Entitlements API endpoint | no | output of infrastructure deployment |
 | `AUTHORIZE_API_KEY` | `********` | The API key clients will need to use when calling the entitlements | yes | -- |
 | `LEGALTAG_API` | ex `https://foo-legal.azurewebsites.net/api/legal/v1` | Legal API endpoint | no | output of infrastructure deployment |
 | `PARTITION_API` | ex `https//foo-partition.azurewebsites.net/api/partition/v1` | Partition API endpoint | no | output of infrastructure deployment |
