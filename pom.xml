@@ -35,6 +35,7 @@
 		<nimbusds.version>7.9</nimbusds.version>
 		<woodstox-core.version>6.2.3</woodstox-core.version>
 		<log4j2.version>2.17.0</log4j2.version>
+		<springfox.version>3.0.0</springfox.version>
 	</properties>
 
 	<licenses>
@@ -118,6 +119,13 @@
 			<version>1.18.8</version>
 			<scope>provided</scope>
 		</dependency>
+		
+		<!--Swagger-->
+    <dependency>
+      <groupId>io.springfox</groupId>
+      <artifactId>springfox-boot-starter</artifactId>
+      <version>${springfox.version}</version>
+    </dependency>
 	</dependencies>
 
   <modules>
