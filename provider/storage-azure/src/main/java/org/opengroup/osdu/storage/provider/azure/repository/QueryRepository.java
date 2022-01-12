@@ -152,6 +152,7 @@ public class QueryRepository implements IQueryRepository {
             }
             docs.forEach(d -> ids.add(d.getId()));
             dqr.setResults(ids);
+            this.logger.info(String.format("Sending ids: %s", ids));
         } catch (CosmosException e) {
             if (e.getStatusCode() == HttpStatus.SC_BAD_REQUEST && e.getMessage().contains("INVALID JSON in continuation token"))
                 throw this.getInvalidCursorException();
